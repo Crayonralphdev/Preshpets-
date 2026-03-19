@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Presh Pets &amp; Accessories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--teal:#0d9488;--teal2:#14b8a6;--dark:#0f2e2b;--bg:#f0faf8;--border:#99f6e4;--amber:#f59e0b;--red:#ef4444;--green:#22c55e;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh}
+button{font-family:'DM Sans',sans-serif;cursor:pointer}
+input,textarea{font-family:'DM Sans',sans-serif}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#e6faf7}::-webkit-scrollbar-thumb{background:var(--teal2);border-radius:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes toastIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fade-up{animation:fadeUp .4s ease both}
+.spinning{animation:spin .8s linear infinite}
+
+/* ── NAV ── */
+#nav{background:linear-gradient(135deg,#0d9488,#0f766e);position:sticky;top:0;z-index:300;box-shadow:0 4px 28px rgba(13,148,136,.4);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:66px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0;text-decoration:none}
+.nav-logo-icon{background:rgba(255,255,255,.18);border-radius:12px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.nav-logo-title{font-family:'Playfair Display',serif;font-weight:800;font-size:18px;color:#fff;line-height:1.1}
+.nav-logo-sub{font-size:9px;color:#99f6e4;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+/* Desktop links */
+.nav-links{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.nav-link{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:30px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .2s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{background:rgba(255,255,255,.2)}
+/* Cart button — always visible */
+.nav-cart-btn{background:#fff;border:none;color:var(--teal);padding:8px 16px;border-radius:30px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;transition:opacity .2s;position:relative;flex-shrink:0;}
+.nav-cart-btn:hover{opacity:.88}
+.cart-badge{background:var(--amber);color:#fff;border-radius:50%;width:20px;height:20px;font-size:10px;font-weight:800;display:none;align-items:center;justify-content:center;flex-shrink:0;}
+.cart-badge.show{display:flex}
+/* User button */
+.nav-user-btn{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:30px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .2s;white-space:nowrap;flex-shrink:0;}
+.nav-user-btn:hover{background:rgba(255,255,255,.25)}
+/* Mobile buttons group */
+.mob-btns{display:none;align-items:center;gap:8px;flex-shrink:0}
+.mob-icon-btn{background:rgba(255,255,255,.18);border:none;color:#fff;width:40px;height:40px;border-radius:10px;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;position:relative;flex-shrink:0;}
+.mob-icon-btn.cart-btn{background:#fff;color:var(--teal)}
+.mob-icon-btn:hover{background:rgba(255,255,255,.28)}
+.mob-cart-dot{position:absolute;top:-3px;right:-3px;background:var(--amber);color:#fff;border-radius:50%;width:17px;height:17px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
+.mob-cart-dot.show{display:flex}
+
+/* ── MOBILE DROPDOWN ── */
+#mobile-drawer{background:linear-gradient(170deg,#0b6b5e,#0f766e);max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1),box-shadow .3s;box-shadow:none;}
+#mobile-drawer.open{max-height:500px;box-shadow:0 16px 48px rgba(0,0,0,.35)}
+.mob-drawer-inner{padding:12px 14px 18px;display:flex;flex-direction:column;gap:5px}
+.mob-nav-item{background:transparent;border:none;color:#fff;padding:13px 16px;border-radius:14px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:12px;text-align:left;width:100%;opacity:0;transform:translateY(-8px);transition:background .18s,opacity .28s ease,transform .28s ease;}
+#mobile-drawer.open .mob-nav-item{opacity:1;transform:translateY(0)}
+#mobile-drawer.open .mob-nav-item:nth-child(1){transition-delay:.04s}
+#mobile-drawer.open .mob-nav-item:nth-child(2){transition-delay:.08s}
+#mobile-drawer.open .mob-nav-item:nth-child(3){transition-delay:.12s}
+.mob-nav-item i{width:20px;text-align:center;color:#99f6e4;font-size:14px}
+.mob-nav-item:hover,.mob-nav-item.mob-active{background:rgba(255,255,255,.14)}
+
+/* ── AUTH MODAL ── */
+#auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;}
+#auth-overlay.show{display:flex}
+.auth-wrap{position:relative;width:100%;max-width:420px}
+.auth-box{background:#fff;border-radius:24px;padding:36px 30px 30px;box-shadow:0 32px 80px rgba(0,0,0,.3);}
+.auth-logo{text-align:center;font-size:38px;margin-bottom:8px}
+.auth-title{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;color:var(--dark);text-align:center;margin-bottom:5px}
+.auth-sub{font-size:13px;color:#5f9ea0;text-align:center;margin-bottom:24px}
+.auth-tabs{display:flex;background:#f0faf8;border-radius:12px;padding:4px;gap:4px;margin-bottom:22px}
+.auth-tab{flex:1;border:none;background:transparent;border-radius:9px;padding:9px;font-weight:700;font-size:13px;color:#5f9ea0;cursor:pointer;transition:all .2s;}
+.auth-tab.active{background:#fff;color:var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.auth-field{margin-bottom:15px}
+.auth-label{display:block;font-size:11px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
+.auth-input{width:100%;padding:12px 14px;border-radius:12px;border:2px solid var(--border);font-size:14px;color:var(--dark);transition:border-color .2s,box-shadow .2s;}
+.auth-input:focus{outline:none;border-color:var(--teal2);box-shadow:0 0 0 3px rgba(20,184,166,.12)}
+.auth-err{font-size:12px;color:var(--red);margin-top:6px;display:none;align-items:center;gap:5px}
+.auth-err.show{display:flex}
+.auth-submit{width:100%;background:linear-gradient(135deg,var(--teal),#0f766e);border:none;border-radius:13px;padding:14px;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;box-shadow:0 6px 20px rgba(13,148,136,.3);cursor:pointer;transition:box-shadow .2s,transform .18s;}
+.auth-submit:hover:not(:disabled){box-shadow:0 0 28px rgba(13,148,136,.5);transform:translateY(-1px)}
+.auth-submit:disabled{opacity:.6;cursor:not-allowed}
+.auth-close-btn{position:absolute;top:-12px;right:-12px;background:#fff;border:none;width:34px;height:34px;border-radius:50%;font-size:14px;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.auth-forgot{text-align:right;margin-top:-8px;margin-bottom:14px}
+.auth-forgot button{background:none;border:none;font-size:12px;color:var(--teal);cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif}
+
+/* ── HERO ── */
+#hero{background:linear-gradient(135deg,#0d9488 0%,#0f766e 55%,#134e4a 100%);padding:68px 24px 84px;text-align:center;position:relative;overflow:hidden;}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 82%,rgba(20,184,166,.28) 0%,transparent 48%),radial-gradient(circle at 82% 18%,rgba(245,158,11,.18) 0%,transparent 48%);}
+.hero-inner{position:relative;max-width:620px;margin:0 auto}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:30px;padding:6px 18px;font-size:11px;color:#99f6e4;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px;}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.6rem);color:#fff;line-height:1.15;margin-bottom:18px;}
+.hero-h1 span{color:#5eead4;font-style:italic}
+.hero-p{color:#ccfbf1;font-size:16px;margin-bottom:36px;line-height:1.7}
+.hero-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-badge{background:rgba(255,255,255,.12);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.2);border-radius:30px;padding:8px 18px;font-size:13px;color:#fff;font-weight:600;display:flex;align-items:center;gap:8px;}
+.hero-badge i{color:#5eead4}
+
+/* ── FILTER BAR ── */
+#filter-bar{background:#fff;border-bottom:2px solid #e6faf7;padding:12px 24px;overflow-x:auto;position:sticky;top:66px;z-index:100;}
+.filter-bar-inner{display:flex;gap:8px;min-width:max-content;max-width:1200px;margin:0 auto;align-items:center;}
+.filter-label{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-right:4px;white-space:nowrap}
+.filter-chip{border:2px solid var(--border);background:var(--bg);color:var(--teal);border-radius:30px;padding:6px 16px;cursor:pointer;font-weight:700;font-size:12px;display:flex;align-items:center;gap:6px;white-space:nowrap;transition:all .2s;}
+.filter-chip:hover{border-color:var(--teal2)}
+.filter-chip.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.filter-divider{width:1px;height:24px;background:#e6faf7;margin:0 4px;flex-shrink:0}
+
+/* ── SEARCH ── */
+#search-bar{max-width:1200px;margin:0 auto;padding:20px 24px 4px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--teal);font-size:13px;pointer-events:none}
+#search-input{width:100%;padding:10px 14px 10px 40px;border-radius:12px;border:2px solid var(--border);background:#fff;font-size:14px;color:var(--dark);transition:border-color .2s,box-shadow .2s;}
+#search-input:focus{outline:none;border-color:var(--teal2);box-shadow:0 0 0 3px rgba(20,184,166,.14)}
+#product-count{font-size:13px;color:var(--teal);font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap}
+
+/* ── PRODUCT GRID ── */
+#product-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;padding:12px 24px 40px;}
+.product-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 18px rgba(13,148,136,.1);transition:transform .25s,box-shadow .25s;}
+.product-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(13,148,136,.18)}
+.card-img{background:linear-gradient(145deg,#e6faf7,#ccfbf1);min-height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.card-img img{width:100%;height:130px;object-fit:cover;display:block}
+.card-img-emoji{font-size:58px;padding:20px 0}
+.card-cat-badge{position:absolute;top:10px;right:10px;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:800;text-transform:uppercase;z-index:1;}
+.cat-food{background:#dcfce7;color:#15803d}.cat-toys{background:#fef9c3;color:#92400e}.cat-accessories{background:#e0f2fe;color:#075985}
+.card-body{padding:14px 16px 18px}
+.card-name{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:var(--dark);margin-bottom:5px}
+.card-desc{font-size:12px;color:#5f9ea0;line-height:1.55;margin-bottom:10px}
+.card-stock{font-size:11px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.stock-ok{color:var(--teal)}.stock-low{color:var(--red)}
+.card-footer{display:flex;justify-content:space-between;align-items:center}
+.card-price{font-family:'Playfair Display',serif;font-size:19px;color:var(--teal);font-weight:700}
+.add-btn{background:linear-gradient(135deg,var(--teal),#0f766e);color:#fff;border:none;border-radius:11px;padding:8px 14px;font-weight:700;font-size:12px;display:flex;align-items:center;gap:5px;transition:box-shadow .2s,transform .18s;}
+.add-btn:hover:not(:disabled){box-shadow:0 0 20px rgba(13,148,136,.5);transform:translateY(-1px)}
+.add-btn:disabled{opacity:.5;cursor:not-allowed}
+.grid-empty{grid-column:1/-1;text-align:center;padding:70px 24px;background:#fff;border-radius:20px;color:#5eead4;}
+.grid-empty i{font-size:52px;display:block;margin-bottom:18px}
+.grid-empty p{font-size:17px;font-weight:700;color:var(--dark)}
+.grid-empty span{font-size:13px;color:#5f9ea0;display:block;margin-top:8px}
+
+/* ── PAGES ── */
+.page-section{display:none}.page-section.active{display:block}
+.page-wrap{max-width:820px;margin:0 auto;padding:30px 22px}
+.page-head{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.page-icon{background:linear-gradient(135deg,var(--teal),#0f766e);border-radius:14px;width:50px;height:50px;min-width:50px;display:flex;align-items:center;justify-content:center;}
+.page-icon i{color:#fff;font-size:20px}
+.page-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--dark);line-height:1.2}
+.page-sub{font-size:13px;color:#5f9ea0;margin-top:2px}
+
+/* ── CART ── */
+.empty-box{text-align:center;padding:60px 24px;background:#fff;border-radius:22px;box-shadow:0 4px 18px rgba(13,148,136,.08);}
+.empty-box i{font-size:60px;color:#99f6e4;display:block;margin-bottom:20px}
+.empty-box h3{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:8px}
+.empty-box p{color:#5f9ea0;margin-bottom:24px;font-size:14px}
+.cta-btn{background:linear-gradient(135deg,var(--teal),#0f766e);color:#fff;border:none;border-radius:13px;padding:12px 26px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:box-shadow .2s,transform .18s;}
+.cta-btn:hover{box-shadow:0 0 22px rgba(13,148,136,.5);transform:translateY(-1px)}
+.cart-list{background:#fff;border-radius:20px;overflow:hidden;margin-bottom:18px;box-shadow:0 4px 18px rgba(13,148,136,.08)}
+.cart-item{padding:15px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #e6faf7}
+.cart-item:last-child{border-bottom:none}
+.cart-thumb{background:#e6faf7;border-radius:12px;width:52px;height:52px;min-width:52px;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;}
+.cart-thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-weight:700;font-size:14px;color:var(--dark);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-price{font-size:12px;color:#5f9ea0}
+.qty-ctrl{display:flex;align-items:center;gap:7px}
+.qty-btn{background:var(--bg);border:2px solid var(--border);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--teal);cursor:pointer;transition:all .2s;}
+.qty-btn:hover{background:var(--teal2);color:#fff;border-color:var(--teal2)}
+.qty-val{font-weight:800;font-size:15px;min-width:20px;text-align:center;color:var(--dark)}
+.cart-item-total{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:var(--teal);min-width:72px;text-align:right}
+.del-btn{background:#fef2f2;border:1.5px solid #fca5a5;color:var(--red);border-radius:9px;width:32px;height:32px;min-width:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;}
+.del-btn:hover{background:#fee2e2}
+.cart-total-bar{background:linear-gradient(135deg,var(--teal),#0f766e);border-radius:18px;padding:18px 22px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.cart-total-label{color:#99f6e4;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.cart-total-amount{font-family:'Playfair Display',serif;font-size:30px;color:#fff;font-weight:700}
+.checkout-btn{background:var(--amber);border:none;border-radius:16px;padding:14px;width:100%;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:box-shadow .2s,transform .18s;}
+.checkout-btn:hover{box-shadow:0 0 24px rgba(245,158,11,.5);transform:translateY(-1px)}
+
+/* ── FULFILLMENT OPTIONS ── */
+.fulfil-options{display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
+.fulfil-opt{display:flex;align-items:center;gap:14px;padding:16px;border-radius:14px;border:2px solid var(--border);cursor:pointer;transition:border-color .2s,background .2s;position:relative;}
+.fulfil-opt:hover{border-color:var(--teal2);background:#f9fffe}
+.fulfil-opt input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+.fulfil-opt.selected{border-color:var(--teal);background:#f0fdf9}
+.fulfil-icon{width:44px;height:44px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--teal);flex-shrink:0;transition:background .2s;}
+.fulfil-opt.selected .fulfil-icon{background:var(--teal);color:#fff}
+.fulfil-text{flex:1}
+.fulfil-label{font-weight:700;font-size:14px;color:var(--dark)}
+.fulfil-sub{font-size:12px;color:#5f9ea0;margin-top:2px}
+.fulfil-check{color:var(--teal);font-size:18px;opacity:0;transition:opacity .2s}
+.fulfil-opt.selected .fulfil-check{opacity:1}
+
+/* ── CHECKOUT ── */
+.checkout-card{background:#fff;border-radius:20px;padding:26px;box-shadow:0 4px 18px rgba(13,148,136,.08)}
+.section-title{font-weight:700;font-size:15px;color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.section-title i{color:var(--teal)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column}
+.form-label{font-size:11px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.form-label i{color:var(--teal);font-size:10px}
+.form-input{padding:11px 14px;border-radius:12px;border:2px solid var(--border);font-size:14px;color:var(--dark);transition:border-color .2s,box-shadow .2s;}
+.form-input:focus{outline:none;border-color:var(--teal2);box-shadow:0 0 0 3px rgba(20,184,166,.14)}
+.saved-notice{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#15803d;display:flex;align-items:center;gap:8px}
+.order-summary-box{background:var(--bg);border-radius:14px;padding:16px;margin:18px 0;border:2px solid var(--border);}
+.summary-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--dark);}
+.summary-row:last-child{border-bottom:none;font-weight:700;font-size:15px;color:var(--teal);padding-top:10px}
+.pay-btn{width:100%;background:linear-gradient(135deg,var(--teal),#0f766e);border:none;border-radius:14px;padding:14px;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 24px rgba(13,148,136,.3);cursor:pointer;transition:box-shadow .2s,transform .18s;}
+.pay-btn:hover:not(:disabled){box-shadow:0 0 28px rgba(13,148,136,.5);transform:translateY(-1px)}
+.pay-btn:disabled{opacity:.7;cursor:not-allowed}
+.pay-secure{text-align:center;font-size:11px;color:#5f9ea0;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* ── ACCOUNT PAGE ── */
+.account-layout{display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:start}
+.account-sidebar{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 18px rgba(13,148,136,.08);position:sticky;top:90px}
+.acct-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#0f766e);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;font-weight:700;margin:0 auto 12px;flex-shrink:0}
+.acct-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);text-align:center;margin-bottom:3px}
+.acct-email{font-size:12px;color:#5f9ea0;text-align:center;margin-bottom:20px}
+.acct-nav-btn{width:100%;background:transparent;border:none;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px;color:#5f9ea0;font-weight:600;font-size:13px;text-align:left;transition:all .18s;margin-bottom:3px;}
+.acct-nav-btn i{width:18px;text-align:center;font-size:13px}
+.acct-nav-btn:hover{background:#f0faf8;color:var(--teal)}
+.acct-nav-btn.active{background:linear-gradient(135deg,var(--teal),#0f766e);color:#fff;font-weight:700;box-shadow:0 3px 14px rgba(13,148,136,.25)}
+.acct-nav-btn.logout{color:var(--red);margin-top:10px;border-top:1px solid var(--border);border-radius:0 0 12px 12px;padding-top:14px}
+.acct-nav-btn.logout:hover{background:#fef2f2}
+.account-content{min-width:0}
+.acct-panel{display:none}
+.acct-panel.active{display:block}
+.acct-card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 18px rgba(13,148,136,.08);margin-bottom:18px}
+.acct-card-title{font-weight:700;font-size:15px;color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.acct-card-title i{color:var(--teal)}
+.profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.pf-label{display:block;font-size:11px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:6px}
+.pf-input{width:100%;padding:11px 14px;border-radius:12px;border:2px solid var(--border);font-size:14px;color:var(--dark);transition:border-color .2s,box-shadow .2s;}
+.pf-input:focus{outline:none;border-color:var(--teal2);box-shadow:0 0 0 3px rgba(20,184,166,.12)}
+.pf-input:disabled{background:#f9fafb;color:#9ca3af;cursor:not-allowed}
+.save-btn{background:linear-gradient(135deg,var(--teal),#0f766e);border:none;border-radius:12px;padding:12px 24px;color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;gap:7px;cursor:pointer;box-shadow:0 4px 16px rgba(13,148,136,.28);transition:box-shadow .2s;}
+.save-btn:hover{box-shadow:0 0 22px rgba(13,148,136,.45)}
+/* Order cards in account */
+.order-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:12px;border:1px solid var(--border);cursor:pointer;transition:box-shadow .2s,transform .15s;box-shadow:0 2px 8px rgba(13,148,136,.06);}
+.order-card:hover{box-shadow:0 8px 28px rgba(13,148,136,.16);transform:translateY(-2px)}
+.order-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.order-id{font-weight:700;font-size:14px;color:var(--dark);display:flex;align-items:center;gap:5px}
+.order-id i{color:var(--teal);font-size:11px}
+.order-date{font-size:11px;color:#5f9ea0;margin-top:3px}
+.order-items-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.order-item-chip{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:3px 9px;font-size:12px;color:var(--dark)}
+.order-card-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px}
+.order-amount{font-family:'Playfair Display',serif;font-size:18px;color:var(--teal);font-weight:700}
+.view-hint{font-size:11px;color:var(--teal);display:flex;align-items:center;gap:4px;opacity:.75}
+
+/* ── STATUS BADGES ── */
+.s-badge{border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.s-received{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.s-processing{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}
+.s-shipped{background:#faf5ff;color:#6b21a8;border:1px solid #e9d5ff}
+.s-out{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+.s-delivered{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
+.s-cancelled{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+
+/* ── ORDER DETAIL SHEET ── */
+#detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:none;align-items:flex-end;justify-content:center;}
+#detail-overlay.show{display:flex}
+.detail-sheet{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;padding:24px 22px 44px;}
+.sheet-handle{width:38px;height:4px;background:#e2e8f0;border-radius:4px;margin:0 auto 20px;}
+.detail-ref{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.detail-meta{font-size:12px;color:#5f9ea0;display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.detail-meta span{display:flex;align-items:center;gap:5px}
+/* Timeline */
+.timeline{position:relative;padding-left:30px;margin-top:20px}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-step{position:relative;margin-bottom:22px;display:flex;align-items:flex-start;gap:12px}
+.tl-dot{width:22px;height:22px;border-radius:50%;border:3px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:-30px;position:relative;z-index:1;}
+.tl-dot.done{background:var(--teal);border-color:var(--teal)}
+.tl-dot.done i{color:#fff;font-size:9px}
+.tl-dot.active{border-color:var(--teal);box-shadow:0 0 0 4px rgba(13,148,136,.14)}
+.tl-dot.active i{color:var(--teal);font-size:9px}
+.tl-dot i{color:#ccc;font-size:9px}
+.tl-label{font-weight:700;font-size:14px;color:#bbb}
+.tl-label.done,.tl-label.active{color:var(--teal)}
+.tl-desc{font-size:12px;color:#5f9ea0;margin-top:1px}
+.tl-time{font-size:11px;color:#5f9ea0;margin-top:2px;font-style:italic}
+.detail-items-box{background:var(--bg);border-radius:14px;padding:16px;margin-top:20px;border:2px solid var(--border);}
+.detail-items-title{font-weight:700;font-size:13px;color:var(--dark);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.detail-item-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--dark);}
+.detail-item-row:last-child{border-bottom:none;font-weight:700;color:var(--teal);margin-top:4px}
+
+/* ── FOOTER ── */
+#footer{background:#0f2e2b;padding:44px 24px 26px;margin-top:60px}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:32px}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.footer-brand-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;font-weight:700}
+.footer-about{font-size:13px;line-height:1.75;color:#5eead4}
+.footer-socials{display:flex;gap:10px;margin-top:16px}
+.social-icon{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;}
+.social-icon:hover{background:rgba(255,255,255,.18)}
+.social-icon i{color:#5eead4;font-size:13px}
+.footer-heading{font-weight:700;color:#fff;margin-bottom:14px;font-size:13px;text-transform:uppercase;letter-spacing:1.5px}
+.footer-link{font-size:13px;color:#5eead4;margin-bottom:9px;display:flex;align-items:center;gap:7px;cursor:pointer}
+.footer-contact-item{font-size:13px;color:#5eead4;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.footer-contact-item i{color:var(--teal);width:14px;flex-shrink:0}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.footer-copy,.footer-secure{font-size:12px;color:#5eead4}
+.footer-secure{display:flex;align-items:center;gap:6px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:14px;font-weight:700;font-size:13px;z-index:9999;box-shadow:0 10px 36px rgba(0,0,0,.22);animation:toastIn .3s ease;display:none;align-items:center;gap:10px;max-width:300px;color:#fff;}
+#toast.show{display:flex}
+#toast.success{background:var(--teal)}
+#toast.error{background:var(--red)}
+#toast.info{background:#3b82f6}
+
+/* ── RESPONSIVE ── */
+@media(max-width:760px){
+  .nav-links{display:none}
+  .mob-btns{display:flex}
+  .account-layout{grid-template-columns:1fr}
+  .account-sidebar{position:static;display:flex;flex-direction:column}
+  .acct-sidebar-nav{display:flex;flex-wrap:wrap;gap:4px}
+  .acct-nav-btn{flex:1;min-width:120px;justify-content:center}
+  .acct-nav-btn.logout{flex:100%;border-top:none;border-radius:12px;padding-top:11px;margin-top:4px}
+  .profile-form-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .cart-item{flex-wrap:wrap}
+  .cart-item-total{min-width:auto}
+  .nav-logo-sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('shop')">
+      <div class="nav-logo-icon">&#x1F43E;</div>
+      <div>
+        <div class="nav-logo-title">Presh Pets</div>
+        <div class="nav-logo-sub">&amp; Accessories</div>
+      </div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="nav-links">
+      <button class="nav-link active" id="nav-shop" onclick="showPage('shop')"><i class="fa-solid fa-store"></i> Shop</button>
+      <button class="nav-link" id="nav-account" onclick="requireAuth('account')"><i class="fa-solid fa-circle-user"></i> My Account</button>
+      <button class="nav-user-btn" id="nav-user-btn" onclick="handleAuthBtn()">
+        <i class="fa-solid fa-right-to-bracket" id="nav-user-icon"></i>
+        <span id="nav-user-label">Login</span>
+      </button>
+      <button class="nav-cart-btn" onclick="showPage('cart')">
+        <i class="fa-solid fa-cart-shopping"></i> Cart
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </div>
+
+    <!-- Mobile -->
+    <div class="mob-btns">
+      <button class="mob-icon-btn cart-btn" onclick="showPage('cart')" title="Cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="mob-cart-dot" id="mob-cart-dot">0</span>
+      </button>
+      <button class="mob-icon-btn" id="mob-menu-btn" onclick="toggleMobileMenu()" title="Menu">
+        <i class="fa-solid fa-bars" id="hamburger-icon"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-drawer">
+    <div class="mob-drawer-inner">
+      <button class="mob-nav-item mob-active" id="mob-shop-btn" onclick="showPage('shop');toggleMobileMenu()"><i class="fa-solid fa-store"></i> Shop</button>
+      <button class="mob-nav-item" id="mob-account-btn" onclick="requireAuth('account');toggleMobileMenu()"><i class="fa-solid fa-circle-user"></i> My Account</button>
+      <button class="mob-nav-item" id="mob-auth-btn" onclick="handleAuthBtn();toggleMobileMenu()">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span id="mob-auth-label">Login / Sign Up</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ AUTH MODAL ═══════════════════ -->
+<div id="auth-overlay" onclick="if(event.target===this)closeAuth()">
+  <div class="auth-wrap">
+    <button class="auth-close-btn" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="auth-box fade-up">
+      <div class="auth-logo">&#x1F43E;</div>
+      <div class="auth-title">Welcome to Presh Pets</div>
+      <div class="auth-sub">Sign in or create an account to continue</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+      <!-- Login -->
+      <div id="auth-login-form">
+        <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="login-email" type="email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="login-pass" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="auth-forgot"><button onclick="showForgotPassword()">Forgot password?</button></div>
+        <div class="auth-err" id="login-err"><i class="fa-solid fa-circle-xmark"></i><span></span></div>
+        <button class="auth-submit" id="login-btn" onclick="doLogin()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+      </div>
+      <!-- Signup -->
+      <div id="auth-signup-form" style="display:none">
+        <div class="auth-field"><label class="auth-label">Full Name</label><input class="auth-input" id="signup-name" type="text" placeholder="John Doe"/></div>
+        <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="signup-email" type="email" placeholder="you@email.com"/></div>
+        <div class="auth-field"><label class="auth-label">Phone</label><input class="auth-input" id="signup-phone" type="tel" placeholder="08012345678"/></div>
+        <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="signup-pass" type="password" placeholder="Min 6 characters"/></div>
+        <div class="auth-err" id="signup-err"><i class="fa-solid fa-circle-xmark"></i><span></span></div>
+        <button class="auth-submit" id="signup-btn" onclick="doSignup()"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ORDER DETAIL SHEET ═══════════════════ -->
+<div id="detail-overlay" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-sheet">
+    <div class="sheet-handle"></div>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SHOP PAGE ═══════════════════ -->
+<section id="page-shop" class="page-section active">
+  <div id="hero">
+    <div class="hero-inner fade-up">
+      <div class="hero-tag"><i class="fa-solid fa-star"></i> Premium Pet Store &middot; Benin City</div>
+      <h1 class="hero-h1">Everything Your Pet<br><span>Loves &amp; Needs</span></h1>
+      <p class="hero-p">Premium food, toys and accessories &mdash; delivered fast to your door.</p>
+      <div class="hero-badges">
+        <div class="hero-badge"><i class="fa-solid fa-truck-fast"></i> Fast Delivery</div>
+        <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> Quality Assured</div>
+        <div class="hero-badge"><i class="fa-solid fa-lock"></i> Secure Payments</div>
+        <div class="hero-badge"><i class="fa-solid fa-gift"></i> Bundles &amp; Gifts</div>
+      </div>
+    </div>
+  </div>
+  <div id="filter-bar">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Category</span>
+      <button class="filter-chip active" data-ftype="cat" data-fval="all" onclick="setFilter('cat','all',this)"><i class="fa-solid fa-border-all"></i> All</button>
+      <button class="filter-chip" data-ftype="cat" data-fval="food" onclick="setFilter('cat','food',this)"><i class="fa-solid fa-bowl-food"></i> Food</button>
+      <button class="filter-chip" data-ftype="cat" data-fval="toys" onclick="setFilter('cat','toys',this)"><i class="fa-solid fa-gamepad"></i> Toys</button>
+      <button class="filter-chip" data-ftype="cat" data-fval="accessories" onclick="setFilter('cat','accessories',this)"><i class="fa-solid fa-tag"></i> Accessories</button>
+      <div class="filter-divider"></div>
+      <span class="filter-label">Pet</span>
+      <button class="filter-chip active" data-ftype="pet" data-fval="all" onclick="setFilter('pet','all',this)"><i class="fa-solid fa-paw"></i> All</button>
+      <button class="filter-chip" data-ftype="pet" data-fval="dog" onclick="setFilter('pet','dog',this)"><i class="fa-solid fa-dog"></i> Dogs</button>
+      <button class="filter-chip" data-ftype="pet" data-fval="cat" onclick="setFilter('pet','cat',this)"><i class="fa-solid fa-cat"></i> Cats</button>
+      <button class="filter-chip" data-ftype="pet" data-fval="bird" onclick="setFilter('pet','bird',this)"><i class="fa-solid fa-dove"></i> Birds</button>
+      <button class="filter-chip" data-ftype="pet" data-fval="fish" onclick="setFilter('pet','fish',this)"><i class="fa-solid fa-fish"></i> Fish</button>
+      <button class="filter-chip" data-ftype="pet" data-fval="small" onclick="setFilter('pet','small',this)"><i class="fa-solid fa-hippo"></i> Small</button>
+    </div>
+  </div>
+  <div id="search-bar">
+    <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="search-input" type="text" placeholder="Search products..." oninput="renderProducts()"/></div>
+    <div id="product-count"><i class="fa-solid fa-layer-group"></i> <span id="count-num">0</span> products</div>
+  </div>
+  <div id="product-grid"></div>
+</section>
+
+<!-- ═══════════════════ CART PAGE ═══════════════════ -->
+<section id="page-cart" class="page-section">
+  <div class="page-wrap">
+    <div class="page-head">
+      <div class="page-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+      <div><div class="page-title">Shopping Cart</div><div class="page-sub" id="cart-subtitle">0 items</div></div>
+    </div>
+    <div id="cart-content"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CHECKOUT PAGE ═══════════════════ -->
+<section id="page-checkout" class="page-section">
+  <div class="page-wrap">
+    <div class="page-head">
+      <div class="page-icon"><i class="fa-solid fa-credit-card"></i></div>
+      <div><div class="page-title">Secure Checkout</div><div class="page-sub">Pay safely with Paystack</div></div>
+    </div>
+    <div class="checkout-card fade-up">
+      <div id="saved-notice" class="saved-notice" style="display:none"><i class="fa-solid fa-circle-check"></i> Your saved details have been filled in</div>
+
+      <!-- STEP 1: Fulfillment method -->
+      <div class="section-title"><i class="fa-solid fa-box"></i> How would you like to receive your order?</div>
+      <div class="fulfil-options">
+        <label class="fulfil-opt" id="opt-delivery">
+          <input type="radio" name="fulfil" value="delivery" checked onchange="onFulfilChange()"/>
+          <div class="fulfil-icon"><i class="fa-solid fa-truck-fast"></i></div>
+          <div class="fulfil-text">
+            <div class="fulfil-label">Home Delivery</div>
+            <div class="fulfil-sub">We deliver to your address &middot; <strong>+&#x20A6;3,000</strong> delivery fee</div>
+          </div>
+          <div class="fulfil-check"><i class="fa-solid fa-circle-check"></i></div>
+        </label>
+        <label class="fulfil-opt" id="opt-pickup">
+          <input type="radio" name="fulfil" value="pickup" onchange="onFulfilChange()"/>
+          <div class="fulfil-icon"><i class="fa-solid fa-store"></i></div>
+          <div class="fulfil-text">
+            <div class="fulfil-label">Store Pickup</div>
+            <div class="fulfil-sub">Pick up from our store &middot; <strong>Free</strong></div>
+          </div>
+          <div class="fulfil-check"><i class="fa-solid fa-circle-check"></i></div>
+        </label>
+      </div>
+
+      <!-- STEP 2: Contact + Address -->
+      <div class="section-title" style="margin-top:22px"><i class="fa-solid fa-user-circle"></i> Your Details</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label"><i class="fa-solid fa-user"></i> Full Name</label><input class="form-input" id="co-name" type="text" placeholder="John Doe"/></div>
+        <div class="form-group"><label class="form-label"><i class="fa-solid fa-envelope"></i> Email</label><input class="form-input" id="co-email" type="email" placeholder="you@email.com"/></div>
+        <div class="form-group"><label class="form-label"><i class="fa-solid fa-phone"></i> Phone</label><input class="form-input" id="co-phone" type="tel" placeholder="08012345678"/></div>
+        <div class="form-group" id="address-field">
+          <label class="form-label"><i class="fa-solid fa-location-dot"></i> Delivery Address</label>
+          <input class="form-input" id="co-address" type="text" placeholder="12 Main St, Lagos"/>
+        </div>
+      </div>
+
+      <!-- STEP 3: Order Summary -->
+      <div class="order-summary-box">
+        <div class="section-title" style="margin-bottom:12px"><i class="fa-solid fa-list-check"></i> Order Summary</div>
+        <div id="checkout-summary"></div>
+      </div>
+
+      <button class="pay-btn" id="pay-btn" onclick="handlePayment()"><i class="fa-solid fa-lock"></i> Pay with Paystack</button>
+      <div class="pay-secure"><i class="fa-solid fa-shield-halved"></i> Secured by Paystack &middot; Payment info is never stored</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ACCOUNT PAGE ═══════════════════ -->
+<section id="page-account" class="page-section">
+  <div class="page-wrap">
+    <div class="page-head">
+      <div class="page-icon"><i class="fa-solid fa-circle-user"></i></div>
+      <div><div class="page-title">My Account</div><div class="page-sub" id="acct-sub">Manage your profile and orders</div></div>
+    </div>
+    <div class="account-layout">
+      <!-- Sidebar -->
+      <div class="account-sidebar">
+        <div class="acct-avatar" id="acct-avatar">&#x1F43E;</div>
+        <div class="acct-name" id="acct-name">Loading...</div>
+        <div class="acct-email" id="acct-email"></div>
+        <div class="acct-sidebar-nav">
+          <button class="acct-nav-btn active" id="acct-tab-profile" onclick="switchAcctTab('profile')"><i class="fa-solid fa-id-card"></i> Profile</button>
+          <button class="acct-nav-btn" id="acct-tab-orders" onclick="switchAcctTab('orders')"><i class="fa-solid fa-box-open"></i> Order History</button>
+          <button class="acct-nav-btn logout" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+      <!-- Content -->
+      <div class="account-content">
+        <!-- Profile Panel -->
+        <div class="acct-panel active" id="acct-panel-profile">
+          <div class="acct-card">
+            <div class="acct-card-title"><i class="fa-solid fa-user-pen"></i> Personal Details</div>
+            <div class="profile-form-grid">
+              <div>
+                <label class="pf-label">Full Name</label>
+                <input class="pf-input" id="pf-name" type="text" placeholder="John Doe"/>
+              </div>
+              <div>
+                <label class="pf-label">Email Address</label>
+                <input class="pf-input" id="pf-email" type="email" disabled/>
+              </div>
+              <div>
+                <label class="pf-label">Phone Number</label>
+                <input class="pf-input" id="pf-phone" type="tel" placeholder="08012345678"/>
+              </div>
+              <div>
+                <label class="pf-label">Default Delivery Address</label>
+                <input class="pf-input" id="pf-address" type="text" placeholder="12 Main St, Lagos"/>
+              </div>
+            </div>
+            <button class="save-btn" onclick="saveProfile()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+          </div>
+          <div class="acct-card">
+            <div class="acct-card-title"><i class="fa-solid fa-lock"></i> Password</div>
+            <p style="font-size:13px;color:#5f9ea0;margin-bottom:14px">To change your password, click below and we'll send a reset link to your email.</p>
+            <button class="save-btn" style="background:linear-gradient(135deg,#475569,#334155)" onclick="sendPasswordReset()"><i class="fa-solid fa-envelope"></i> Send Password Reset Email</button>
+          </div>
+        </div>
+        <!-- Orders Panel -->
+        <div class="acct-panel" id="acct-panel-orders">
+          <div class="acct-card">
+            <div class="acct-card-title"><i class="fa-solid fa-clock-rotate-left"></i> Order History</div>
+            <div id="order-history-list"><div style="text-align:center;padding:30px;color:#5f9ea0"><i class="fa-solid fa-spinner spinning" style="font-size:24px"></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span style="font-size:26px">&#x1F43E;</span><span class="footer-brand-title">Presh Pets</span></div>
+        <p class="footer-about">Premium pet supplies delivered to your doorstep. Because your pets deserve the best.</p>
+        <div class="footer-socials">
+          <div class="social-icon"><i class="fa-brands fa-facebook-f"></i></div>
+          <div class="social-icon"><i class="fa-brands fa-instagram"></i></div>
+          <div class="social-icon"><i class="fa-brands fa-twitter"></i></div>
+          <a href="https://wa.me/2347062094439" target="_blank" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Shop</div>
+        <div class="footer-link"><i class="fa-solid fa-angle-right"></i> All Products</div>
+        <div class="footer-link"><i class="fa-solid fa-angle-right"></i> Dog Supplies</div>
+        <div class="footer-link"><i class="fa-solid fa-angle-right"></i> Cat Supplies</div>
+        <div class="footer-link"><i class="fa-solid fa-angle-right"></i> Bird &amp; Fish</div>
+      </div>
+      <div>
+        <div class="footer-heading">Contact Us</div>
+        <div class="footer-contact-item"><i class="fa-solid fa-phone"></i> +234 706 209 4439</div>
+        <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1e777078715e6e6c7b6d766e7b6a6d307d7173">[email&#160;protected]</a></div>
+        <div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i> GLOGAM Plaza, Edo Street Junction, off Airport Rd, Benin City, Edo State</div>
+        <div class="footer-contact-item"><i class="fa-solid fa-clock"></i> Mon&ndash;Sat &middot; 8am &ndash; 6pm</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2024 Presh Pets &amp; Accessories. All rights reserved.</div>
+      <div class="footer-secure"><i class="fa-solid fa-shield-halved"></i> Payments secured by Paystack</div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast"><i id="toast-icon" class="fa-solid fa-circle-check"></i> <span id="toast-msg"></span></div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+var API          = 'api.php';
+var PAYSTACK_KEY = 'pk_live_f1747ed1c2bff6934936083b0ce7d18006f81b52';
+
+async function api(action, data){
+  try {
+    var res = await fetch(API + '?action=' + action, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(Object.assign({action:action}, data||{}))
+    });
+    if(!res.ok) return {ok:false, error:'Server error ('+res.status+'). Make sure api.php is running.'};
+    return await res.json();
+  } catch(e) {
+    return {ok:false, error:'Cannot reach api.php. Are you running this on a server (XAMPP/cPanel)?'};
+  }
+}
+
+// ── STATE ──────────────────────────────────────────────────
+var PRODUCTS=[], cart=[], activeFilters={cat:'all',pet:'all'};
+var currentUser=null, currentProfile=null;
+var DELIVERY_STEPS=[
+  {key:'Order Received',   desc:'We have received your order and payment'},
+  {key:'Processing',       desc:'Your items are being carefully prepared'},
+  {key:'Shipped',          desc:'Your order is on its way to you'},
+  {key:'Out for Delivery', desc:'Your order is out for delivery today'},
+  {key:'Delivered',        desc:'Your order has been delivered. Enjoy!'},
+];
+var PICKUP_STEPS=[
+  {key:'Preparing for Pickup', desc:'We have received your order and are preparing it'},
+  {key:'Ready for Pickup',     desc:'Your order is ready! Come pick it up at our store'},
+  {key:'Picked Up',            desc:'Order collected. Thank you for shopping with us!'},
+];
+
+// ── INIT ───────────────────────────────────────────────────
+(async function(){
+  await loadAdminProducts();
+  var saved = localStorage.getItem('preshpets_user');
+  if(saved){ try{ currentUser=JSON.parse(saved); } catch(e){} }
+  if(currentUser){ await loadProfile(); }
+  loadCart();
+  updateNavUI(); updateBadge();
+})();
+
+// ── PRODUCTS ───────────────────────────────────────────────
+async function loadAdminProducts(){
+  var r = await api('get_products');
+  if(!r.ok) return;
+  var cm={Food:'food',Toys:'toys',Accessories:'accessories'};
+  PRODUCTS = (r.products||[]).map(function(p){
+    return {
+      id: p.id, name: p.name,
+      cat: cm[p.category] || p.category.toLowerCase(),
+      pet: 'dog', price: parseFloat(p.price),
+      img: p.image || null,
+      desc: p.description || '',
+      stock: parseInt(p.stock)
+    };
+  });
+  renderProducts();
+}
+
+function setFilter(type,val,btn){
+  activeFilters[type]=val;
+  document.querySelectorAll('.filter-chip[data-ftype="'+type+'"]').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function renderProducts(){
+  var q=(document.getElementById('search-input').value||'').toLowerCase();
+  var list=PRODUCTS.filter(function(p){
+    return (activeFilters.cat==='all'||p.cat===activeFilters.cat)
+        &&(activeFilters.pet==='all'||p.pet===activeFilters.pet)
+        &&(!q||p.name.toLowerCase().includes(q)||(p.desc||'').toLowerCase().includes(q));
+  });
+  document.getElementById('count-num').textContent=list.length;
+  var grid=document.getElementById('product-grid');
+  if(!list.length){
+    grid.innerHTML='<div class="grid-empty"><i class="fa-solid fa-box-open"></i><p>'+(PRODUCTS.length?'No products match':'No products yet')+'</p><span>'+(PRODUCTS.length?'Try different filters':'Products added in the admin panel will appear here')+'</span></div>';
+    return;
+  }
+  var cc={food:'cat-food',toys:'cat-toys',accessories:'cat-accessories'};
+  grid.innerHTML=list.map(function(p){
+    var ic=cart.find(function(c){return parseInt(c.id)===parseInt(p.id);});
+    var sok=p.stock>10,snone=p.stock===0;
+    var stk=snone?'<i class="fa-solid fa-circle-xmark"></i> Out of stock':!sok?'<i class="fa-solid fa-triangle-exclamation"></i> Only '+p.stock+' left':'<i class="fa-solid fa-circle-check"></i> In stock';
+    var imgHtml=p.img&&p.img.startsWith('data:')?'<img src="'+p.img+'" alt="'+p.name+'"/>':'<div class="card-img-emoji">&#x1F4E6;</div>';
+    return '<div class="product-card">'
+      +'<div class="card-img"><div class="card-cat-badge '+(cc[p.cat]||'cat-food')+'">'+p.cat+'</div>'+imgHtml+'</div>'
+      +'<div class="card-body"><div class="card-name">'+p.name+'</div><div class="card-desc">'+p.desc+'</div>'
+      +'<div class="card-stock '+(sok?'stock-ok':'stock-low')+'">'+stk+'</div>'
+      +'<div class="card-footer"><div class="card-price">&#x20A6;'+fmt(p.price)+'</div>'
+      +'<button class="add-btn" onclick="addToCart('+p.id+')" '+(snone?'disabled':'')+'>'
+      +'<i class="fa-solid fa-'+(ic?'check':'cart-plus')+'"></i> '+(ic?'Added':'Add')
+      +'</button></div></div></div>';
+  }).join('');
+}
+
+// ── CART ───────────────────────────────────────────────────
+function cartKey(){ return 'preshpets_cart_'+(currentUser ? currentUser.id : 'guest'); }
+function saveCart(){ try{ localStorage.setItem(cartKey(), JSON.stringify(cart)); }catch(e){} }
+function loadCart(){ try{ cart=JSON.parse(localStorage.getItem(cartKey())||'[]'); }catch(e){ cart=[]; } }
+
+function addToCart(id){
+  id = parseInt(id);
+  var p=PRODUCTS.find(function(x){return parseInt(x.id)===id;});
+  if(!p||p.stock===0) return;
+  var ex=cart.find(function(c){return parseInt(c.id)===id;});
+  if(ex){if(ex.qty<p.stock)ex.qty++;else{showToast('Max stock reached','error');return;}}
+  else cart.push({id:p.id,name:p.name,price:p.price,img:p.img,qty:1});
+  saveCart(); updateBadge(); renderProducts(); showToast(p.name+' added to cart','success');
+}
+
+function updateBadge(){
+  var t=cart.reduce(function(s,c){return s+c.qty;},0);
+  var b=document.getElementById('cart-badge');
+  if(b){b.textContent=t; t>0?b.classList.add('show'):b.classList.remove('show');}
+  var d=document.getElementById('mob-cart-dot');
+  if(d){d.textContent=t; d.classList.toggle('show',t>0);}
+}
+
+function renderCart(){
+  var sub=document.getElementById('cart-subtitle');
+  var cnt=document.getElementById('cart-content');
+  var t=cart.reduce(function(s,c){return s+c.qty;},0);
+  sub.textContent=t+' item'+(t!==1?'s':'')+' in your cart';
+  if(!cart.length){
+    cnt.innerHTML='<div class="empty-box"><i class="fa-solid fa-cart-shopping"></i><h3>Your cart is empty</h3><p>Add some products to get started</p><button class="cta-btn" onclick="showPage(\'shop\')"><i class="fa-solid fa-store"></i> Continue Shopping</button></div>';
+    return;
+  }
+  var grand=cart.reduce(function(s,c){return s+c.price*c.qty;},0);
+  cnt.innerHTML='<div class="cart-list">'+cart.map(function(c){
+    var th=c.img&&c.img.startsWith('data:')?'<img src="'+c.img+'" alt="'+c.name+'"/>':'&#x1F4E6;';
+    return '<div class="cart-item"><div class="cart-thumb">'+th+'</div>'
+      +'<div class="cart-item-info"><div class="cart-item-name">'+c.name+'</div><div class="cart-item-price">&#x20A6;'+fmt(c.price)+' each</div></div>'
+      +'<div class="qty-ctrl"><button class="qty-btn" onclick="chQty('+c.id+',-1)"><i class="fa-solid fa-minus" style="font-size:9px"></i></button><span class="qty-val">'+c.qty+'</span><button class="qty-btn" onclick="chQty('+c.id+',1)"><i class="fa-solid fa-plus" style="font-size:9px"></i></button></div>'
+      +'<div class="cart-item-total">&#x20A6;'+fmt(c.price*c.qty)+'</div>'
+      +'<button class="del-btn" onclick="removeItem('+c.id+')"><i class="fa-solid fa-trash" style="font-size:10px"></i></button></div>';
+  }).join('')+'</div>'
+  +'<div class="cart-total-bar"><div><div class="cart-total-label">Total</div><div class="cart-total-amount">&#x20A6;'+fmt(grand)+'</div></div><i class="fa-solid fa-cart-shopping" style="color:rgba(255,255,255,.2);font-size:48px"></i></div>'
+  +'<button class="checkout-btn" onclick="goCheckout()"><i class="fa-solid fa-lock"></i> Proceed to Checkout</button>';
+}
+
+function chQty(id,d){
+  id=parseInt(id);
+  var item=cart.find(function(c){return parseInt(c.id)===id;});
+  if(!item) return;
+  var prod=PRODUCTS.find(function(p){return parseInt(p.id)===id;});
+  item.qty=Math.max(1,Math.min(item.qty+d,prod?prod.stock:99));
+  saveCart(); updateBadge(); renderCart();
+}
+function removeItem(id){
+  id=parseInt(id);
+  cart=cart.filter(function(c){return parseInt(c.id)!==id;});
+  saveCart(); updateBadge(); renderCart(); renderProducts();
+}
+
+// ── CHECKOUT ───────────────────────────────────────────────
+var DELIVERY_FEE = 3000;
+
+function goCheckout(){
+  if(!currentUser){showToast('Please log in to checkout','info');showAuth();return;}
+  showPage('checkout');
+}
+
+function getSelectedFulfil(){
+  var r = document.querySelector('input[name="fulfil"]:checked');
+  return r ? r.value : 'delivery';
+}
+
+function onFulfilChange(){
+  var isDelivery = getSelectedFulfil() === 'delivery';
+  var af = document.getElementById('address-field');
+  if(af) af.style.display = isDelivery ? '' : 'none';
+  document.querySelectorAll('.fulfil-opt').forEach(function(el){
+    var radio = el.querySelector('input[type=radio]');
+    el.classList.toggle('selected', radio && radio.checked);
+  });
+  renderCheckoutSummary();
+}
+
+function renderCheckoutSummary(){
+  var subtotal = cart.reduce(function(s,c){return s+c.price*c.qty;},0);
+  var isDelivery = getSelectedFulfil() === 'delivery';
+  var total = subtotal + (isDelivery ? DELIVERY_FEE : 0);
+  var html = cart.map(function(c){
+    return '<div class="summary-row"><span>'+c.name+' x'+c.qty+'</span><span>&#x20A6;'+fmt(c.price*c.qty)+'</span></div>';
+  }).join('');
+  html += '<div class="summary-row"><span>Subtotal</span><span>&#x20A6;'+fmt(subtotal)+'</span></div>';
+  if(isDelivery){
+    html += '<div class="summary-row"><span><i class="fa-solid fa-truck-fast" style="color:var(--teal)"></i> Delivery Fee</span><span>&#x20A6;'+fmt(DELIVERY_FEE)+'</span></div>';
+  } else {
+    html += '<div class="summary-row"><span><i class="fa-solid fa-store" style="color:var(--teal)"></i> Store Pickup</span><span style="color:var(--green);font-weight:700">Free</span></div>';
+  }
+  html += '<div class="summary-row"><span>Total</span><span>&#x20A6;'+fmt(total)+'</span></div>';
+  document.getElementById('checkout-summary').innerHTML = html;
+}
+
+function renderCheckout(){
+  renderCheckoutSummary();
+  onFulfilChange();
+  var notice = document.getElementById('saved-notice');
+  if(currentUser && currentProfile && (currentProfile.full_name || currentProfile.address)){
+    if(currentProfile.full_name) document.getElementById('co-name').value  = currentProfile.full_name;
+    if(currentUser.email)        document.getElementById('co-email').value = currentUser.email;
+    if(currentProfile.phone)     document.getElementById('co-phone').value = currentProfile.phone;
+    if(currentProfile.address)   document.getElementById('co-address').value = currentProfile.address;
+    notice.style.display = 'flex';
+  } else { notice.style.display = 'none'; }
+}
+
+async function handlePayment(){
+  var name  = document.getElementById('co-name').value.trim();
+  var email = document.getElementById('co-email').value.trim();
+  var phone = document.getElementById('co-phone').value.trim();
+  var fulfil = getSelectedFulfil();
+  var addr  = fulfil === 'delivery' ? document.getElementById('co-address').value.trim() : 'Store Pickup';
+
+  if(!name || !email || !phone){ showToast('Please fill in your name, email and phone','error'); return; }
+  if(!email.includes('@')){ showToast('Enter a valid email address','error'); return; }
+  if(fulfil === 'delivery' && !addr){ showToast('Please enter your delivery address','error'); return; }
+  if(!cart.length){ showToast('Your cart is empty','error'); return; }
+  if(!currentUser){ showToast('Please log in to place an order','info'); showAuth(); return; }
+
+  var subtotal = cart.reduce(function(s,c){return s+c.price*c.qty;},0);
+  var deliveryFee = fulfil === 'delivery' ? DELIVERY_FEE : 0;
+  var grand = subtotal + deliveryFee;
+  var initStatus = fulfil === 'pickup' ? 'Preparing for Pickup' : 'Order Received';
+
+  var btn = document.getElementById('pay-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner spinning"></i> Processing...';
+
+  async function placeOrder(ref){
+    var r = await api('place_order', {
+      user_id: currentUser ? currentUser.id : '',
+      customer_name: name, phone: phone, address: addr,
+      items: cart, total: grand, delivery_fee: deliveryFee,
+      fulfillment: fulfil, paystack_ref: ref || ''
+    });
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay with Paystack';
+    if(!r.ok){ showToast('Could not save order: ' + (r.error||'Unknown error'), 'error'); return; }
+    if(currentProfile && !currentProfile.address && fulfil === 'delivery' && addr){
+      currentProfile.address = addr; if(phone) currentProfile.phone = phone;
+    }
+    cart = []; saveCart(); updateBadge(); renderProducts();
+    showToast('Order placed successfully! Payment confirmed.', 'success');
+    showPage('account'); switchAcctTab('orders');
+  }
+
+  try{
+    PaystackPop.setup({
+      key: PAYSTACK_KEY,
+      email: email,
+      amount: grand * 100,
+      currency: 'NGN',
+      ref: 'PP-' + Date.now(),
+      metadata: {name:name, phone:phone, address:addr, fulfillment:fulfil},
+      callback: function(response){ placeOrder(response.reference); },
+      onClose: function(){
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay with Paystack';
+        showToast('Payment was not completed','error');
+      }
+    }).openIframe();
+  } catch(e){ placeOrder(null); }
+}
+
+// ── ACCOUNT PAGE ────────────────────────────────────────────
+function switchAcctTab(tab){
+  document.querySelectorAll('.acct-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.acct-nav-btn:not(.logout)').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('acct-panel-'+tab).classList.add('active');
+  document.getElementById('acct-tab-'+tab).classList.add('active');
+  if(tab==='orders') loadOrderHistory();
+}
+
+function loadAccountPage(){
+  if(!currentUser){ showAuth(); return; }
+  var name=currentProfile&&currentProfile.full_name||currentUser.email.split('@')[0];
+  var initials=name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+  document.getElementById('acct-avatar').textContent=initials||'P';
+  document.getElementById('acct-name').textContent=currentProfile&&currentProfile.full_name||'Welcome!';
+  document.getElementById('acct-email').textContent=currentUser.email;
+  document.getElementById('acct-sub').textContent='Hi '+name.split(' ')[0]+'! Manage your profile and orders below.';
+  document.getElementById('pf-name').value=currentProfile&&currentProfile.full_name||'';
+  document.getElementById('pf-email').value=currentUser.email;
+  document.getElementById('pf-phone').value=currentProfile&&currentProfile.phone||'';
+  document.getElementById('pf-address').value=currentProfile&&currentProfile.address||'';
+}
+
+async function loadOrderHistory(){
+  var el=document.getElementById('order-history-list');
+  el.innerHTML='<div style="text-align:center;padding:30px;color:#5f9ea0"><i class="fa-solid fa-spinner spinning" style="font-size:24px"></i></div>';
+  var r=await api('get_orders',{user_id:currentUser.id});
+  if(!r.ok){el.innerHTML='<p style="color:var(--red);font-size:13px">Error loading orders. Please try again.</p>';return;}
+  var orders=r.orders||[];
+  if(!orders.length){
+    el.innerHTML='<div class="empty-box" style="padding:40px"><i class="fa-solid fa-box-open"></i><h3>No orders yet</h3><p>Your order history will appear here</p><button class="cta-btn" onclick="showPage(\'shop\')"><i class="fa-solid fa-store"></i> Start Shopping</button></div>';
+    return;
+  }
+  el.innerHTML=orders.map(function(o,i){
+    var items=Array.isArray(o.items)?o.items:[];
+    return '<div class="order-card" onclick="showDetail('+i+',\''+encodeURIComponent(JSON.stringify(o))+'\')">'
+      +'<div class="order-card-top">'
+      +'<div><div class="order-id"><i class="fa-solid fa-hashtag"></i>'+o.id+'</div><div class="order-date">'+new Date(o.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'</div></div>'
+      +statusBadge(o.status)+'</div>'
+      +'<div class="order-items-wrap">'+items.map(function(it){return '<span class="order-item-chip">'+it.name+' x'+it.qty+'</span>';}).join('')+'</div>'
+      +'<div class="order-card-bottom"><div class="order-amount">&#x20A6;'+fmt(o.total)+'</div><div class="view-hint"><i class="fa-solid fa-timeline"></i> Tap to track</div></div>'
+      +'</div>';
+  }).join('');
+  window._orders=orders;
+}
+
+function showDetail(i, encoded){
+  var o;
+  try{ o=JSON.parse(decodeURIComponent(encoded)); }catch(e){ o=window._orders&&window._orders[i]; }
+  if(!o) return;
+  api('get_order',{order_id:o.id}).then(function(res){
+    if(res.ok && res.order) o=res.order;
+    var items=Array.isArray(o.items)?o.items:[];
+    var sh=Array.isArray(o.status_history)?o.status_history:[];
+    var isPickup = o.fulfillment === 'pickup';
+    var steps = isPickup ? PICKUP_STEPS : DELIVERY_STEPS;
+    var curIdx=steps.findIndex(function(s){return s.key===o.status;});
+    var cancelled=o.status==='Cancelled';
+
+    var tlHtml=cancelled
+      ?'<div class="tl-step"><div class="tl-dot done" style="background:var(--red);border-color:var(--red)"><i class="fa-solid fa-xmark"></i></div><div><div class="tl-label done" style="color:var(--red)">Order Cancelled</div><div class="tl-desc">This order has been cancelled.</div></div></div>'
+      :steps.map(function(s,i){
+          var done=curIdx>i, active=curIdx===i;
+          var cls=done?'done':active?'active':'';
+          var hist=sh.find(function(h){return h.status===s.key;});
+          return '<div class="tl-step"><div class="tl-dot '+cls+'"><i class="fa-solid '+(done?'fa-check':active?'fa-circle-dot':'fa-circle')+'"></i></div>'
+            +'<div><div class="tl-label '+cls+'">'+s.key+'</div><div class="tl-desc">'+s.desc+'</div>'
+            +(hist?'<div class="tl-time"><i class="fa-regular fa-clock" style="font-size:9px"></i> '+hist.time+'</div>':'')+'</div></div>';
+        }).join('');
+
+    var fulfBadge=isPickup
+      ?'<span class="s-badge s-processing" style="margin-left:8px"><i class="fa-solid fa-store" style="font-size:9px"></i> Store Pickup</span>'
+      :'<span class="s-badge s-received" style="margin-left:8px"><i class="fa-solid fa-truck-fast" style="font-size:9px"></i> Delivery</span>';
+
+    var deliveryRow = o.delivery_fee>0
+      ?'<div class="detail-item-row"><span><i class="fa-solid fa-truck-fast" style="color:var(--teal)"></i> Delivery Fee</span><span>&#x20A6;'+fmt(o.delivery_fee)+'</span></div>'
+      :'<div class="detail-item-row"><span><i class="fa-solid fa-store" style="color:var(--teal)"></i> Pickup</span><span style="color:var(--green);font-weight:700">Free</span></div>';
+
+    document.getElementById('detail-content').innerHTML=
+      '<div class="detail-ref"><i class="fa-solid fa-hashtag" style="color:var(--teal)"></i> '+o.id+'</div>'
+      +'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:14px">'+statusBadge(o.status)+fulfBadge+'</div>'
+      +'<div class="detail-meta"><span><i class="fa-regular fa-calendar"></i>'+new Date(o.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'</span>'
+      +'<span><i class="fa-solid fa-user"></i>'+o.customer_name+'</span>'
+      +'<span><i class="fa-solid fa-'+(isPickup?'store':'location-dot')+'"></i>'+o.address+'</span></div>'
+      +'<div class="timeline">'+tlHtml+'</div>'
+      +'<div class="detail-items-box"><div class="detail-items-title"><i class="fa-solid fa-list-check" style="color:var(--teal)"></i> Items Ordered</div>'
+      +items.map(function(it){return '<div class="detail-item-row"><span>'+it.name+' x'+it.qty+'</span><span>&#x20A6;'+fmt(it.price*it.qty)+'</span></div>';}).join('')
+      +deliveryRow
+      +'<div class="detail-item-row"><span>Total Paid</span><span>&#x20A6;'+fmt(o.total)+'</span></div></div>';
+
+    document.getElementById('detail-overlay').classList.add('show');
+    document.body.style.overflow='hidden';
+  });
+}
+
+function closeDetail(){
+  document.getElementById('detail-overlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// ── AUTH ───────────────────────────────────────────────────
+function showAuth(){
+  switchAuthTab('login');
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-err').classList.remove('show');
+  document.getElementById('auth-overlay').classList.add('show');
+}
+function closeAuth(){ document.getElementById('auth-overlay').classList.remove('show'); }
+
+function switchAuthTab(tab){
+  document.getElementById('auth-login-form').style.display=tab==='login'?'block':'none';
+  document.getElementById('auth-signup-form').style.display=tab==='signup'?'block':'none';
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('login-err').classList.remove('show');
+  document.getElementById('signup-err').classList.remove('show');
+}
+
+function setAuthErr(id,msg){
+  var el=document.getElementById(id);
+  el.querySelector('span').textContent=msg;
+  el.classList.add('show');
+}
+
+async function doLogin(){
+  var email=document.getElementById('login-email').value.trim();
+  var pass=document.getElementById('login-pass').value;
+  document.getElementById('login-err').classList.remove('show');
+  if(!email||!pass){setAuthErr('login-err','Please enter email and password.');return;}
+  var btn=document.getElementById('login-btn');
+  btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner spinning"></i> Logging in...';
+  var r=await api('login',{email:email,password:pass});
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-right-to-bracket"></i> Login';
+  if(!r.ok){setAuthErr('login-err',r.error||'Login failed.');return;}
+  currentUser=r.user; currentProfile={full_name:r.user.name,phone:r.user.phone,address:r.user.address};
+  localStorage.setItem('preshpets_user', JSON.stringify(currentUser));
+  // merge guest cart into user cart
+  var guestCart = cart.slice();
+  loadCart();
+  guestCart.forEach(function(gi){
+    var ex = cart.find(function(c){return c.id===gi.id;});
+    if(ex) ex.qty = Math.min(ex.qty+gi.qty, 99);
+    else cart.push(gi);
+  });
+  if(guestCart.length) saveCart();
+  updateNavUI(); updateBadge(); renderProducts(); closeAuth();
+  showToast('Welcome back, '+(currentProfile.full_name?currentProfile.full_name.split(' ')[0]:'friend')+'!','success');
+}
+
+async function doSignup(){
+  var name=document.getElementById('signup-name').value.trim();
+  var email=document.getElementById('signup-email').value.trim();
+  var phone=document.getElementById('signup-phone').value.trim();
+  var pass=document.getElementById('signup-pass').value;
+  document.getElementById('signup-err').classList.remove('show');
+  if(!name||!email||!pass){setAuthErr('signup-err','Please fill all required fields.');return;}
+  if(pass.length<6){setAuthErr('signup-err','Password must be at least 6 characters.');return;}
+  var btn=document.getElementById('signup-btn');
+  btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner spinning"></i> Creating account...';
+  var r=await api('signup',{name:name,email:email,phone:phone,password:pass});
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-user-plus"></i> Create Account';
+  if(!r.ok){setAuthErr('signup-err',r.error||'Signup failed.');return;}
+  currentUser=r.user; currentProfile={full_name:r.user.name,phone:r.user.phone,address:r.user.address};
+  localStorage.setItem('preshpets_user', JSON.stringify(currentUser));
+  loadCart(); updateNavUI(); updateBadge(); renderProducts(); closeAuth();
+  showToast('Account created! Welcome, '+name.split(' ')[0]+'!','success');
+}
+
+async function doLogout(){
+  currentUser=null; currentProfile=null;
+  localStorage.removeItem('preshpets_user');
+  loadCart();
+  updateNavUI(); updateBadge(); renderProducts();
+  showPage('shop');
+  showToast('You have been logged out','info');
+}
+
+async function loadProfile(){
+  if(!currentUser) return;
+  var r=await api('get_profile',{user_id:currentUser.id});
+  if(r.ok) currentProfile={full_name:r.profile.name,phone:r.profile.phone,address:r.profile.address};
+  else currentProfile={full_name:'',phone:'',address:''};
+}
+
+async function saveProfile(){
+  if(!currentUser) return;
+  var name=document.getElementById('pf-name').value.trim();
+  var phone=document.getElementById('pf-phone').value.trim();
+  var addr=document.getElementById('pf-address').value.trim();
+  var r=await api('save_profile',{user_id:currentUser.id,name:name,phone:phone,address:addr});
+  if(!r.ok){showToast('Error saving: '+(r.error||'Unknown error'),'error');return;}
+  currentProfile={full_name:name,phone:phone,address:addr};
+  updateNavUI(); loadAccountPage();
+  showToast('Profile saved!','success');
+}
+
+async function sendPasswordReset(){ showToast('Contact admin to reset your password.','info'); }
+async function showForgotPassword(){ showToast('Contact admin to reset your password.','info'); closeAuth(); }
+
+// ── NAV ────────────────────────────────────────────────────
+function updateNavUI(){
+  var label=document.getElementById('nav-user-label');
+  var icon=document.getElementById('nav-user-icon');
+  var mobLabel=document.getElementById('mob-auth-label');
+  if(currentUser&&currentProfile){
+    var first=(currentProfile.full_name||currentUser.email).split(' ')[0];
+    label.textContent=first;
+    icon.className='fa-solid fa-circle-user';
+    mobLabel.textContent='Profile ('+first+')';
+  } else {
+    label.textContent='Login';
+    icon.className='fa-solid fa-right-to-bracket';
+    mobLabel.textContent='Login / Sign Up';
+  }
+}
+
+function handleAuthBtn(){
+  if(currentUser){ showPage('account'); }
+  else { showAuth(); }
+}
+
+function requireAuth(page){
+  if(!currentUser){ showAuth(); return; }
+  showPage(page);
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────
+function showPage(p){
+  document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-link').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+p).classList.add('active');
+  var nb=document.getElementById('nav-'+p); if(nb) nb.classList.add('active');
+  if(p==='cart')     renderCart();
+  if(p==='checkout') renderCheckout();
+  if(p==='account'){ loadAccountPage(); switchAcctTab('profile'); }
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.mob-nav-item').forEach(function(b){b.classList.remove('mob-active');});
+  var mb=document.getElementById('mob-'+p+'-btn'); if(mb) mb.classList.add('mob-active');
+}
+
+function toggleMobileMenu(){
+  var d=document.getElementById('mobile-drawer');
+  var icon=document.getElementById('hamburger-icon');
+  var open=!d.classList.contains('open');
+  d.classList.toggle('open');
+  icon.className=open?'fa-solid fa-xmark':'fa-solid fa-bars';
+}
+
+document.addEventListener('click',function(e){
+  var d=document.getElementById('mobile-drawer'),btn=document.getElementById('mob-menu-btn');
+  if(d.classList.contains('open')&&!d.contains(e.target)&&btn&&!btn.contains(e.target)){
+    d.classList.remove('open');
+    document.getElementById('hamburger-icon').className='fa-solid fa-bars';
+  }
+});
+
+// ── HELPERS ────────────────────────────────────────────────
+function statusBadge(s){
+  var m={'Order Received':'s-received','Processing':'s-processing','Shipped':'s-shipped','Out for Delivery':'s-out','Delivered':'s-delivered','Cancelled':'s-cancelled'};
+  var icons={'Order Received':'fa-circle-check','Processing':'fa-gear','Shipped':'fa-truck-fast','Out for Delivery':'fa-location-arrow','Delivered':'fa-house-circle-check','Cancelled':'fa-xmark'};
+  return '<span class="s-badge '+(m[s]||'s-received')+'"><i class="fa-solid '+(icons[s]||'fa-circle')+'" style="font-size:9px"></i> '+s+'</span>';
+}
+
+function fmt(n){return Number(n).toLocaleString('en-NG');}
+
+var _toastT;
+function showToast(msg,type){
+  type=type||'success';
+  var t=document.getElementById('toast'),icon=document.getElementById('toast-icon'),span=document.getElementById('toast-msg');
+  t.className='show '+type;
+  icon.className='fa-solid fa-'+(type==='success'?'circle-check':type==='error'?'circle-xmark':'circle-info');
+  span.textContent=msg;
+  clearTimeout(_toastT);
+  _toastT=setTimeout(function(){t.classList.remove('show');},3500);
+}
+</script>
+</body>
+</html>
